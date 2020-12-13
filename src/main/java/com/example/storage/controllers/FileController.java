@@ -2,7 +2,6 @@ package com.example.storage.controllers;
 
 import com.example.storage.services.MultipartService;
 import com.example.storage.services.VideoStreamService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,14 +28,14 @@ public class FileController {
         return Mono.just(videoStreamService.prepareContent(fileName, fileType, httpRangeList));
     }
 
-    @PostMapping("uploadVideo")
+    @PostMapping("/uploadVideo")
     public ResponseEntity<?> uploadVideo(@RequestParam MultipartFile file) {
         try {
             multipartService.transferFile(file);
             return new ResponseEntity(HttpStatus.OK);
         } catch (IOException e) {
             e.printStackTrace();
-            return new ResponseEntity(e.getMessage(), HttpStatus.OK);
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
