@@ -2,6 +2,7 @@ package com.example.storage.controllers;
 
 import com.example.storage.services.MultipartService;
 import com.example.storage.services.VideoStreamService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ public class FileController {
         this.multipartService = multipartService;
     }
 
+    @ApiOperation("Stream video")
     @GetMapping("/stream/{fileName}/{fileType}")
     public Mono<ResponseEntity<byte[]>> streamVideo(@RequestHeader(value = "Range", required = false) String httpRangeList,
                                                     @PathVariable("fileType") String fileType,
@@ -28,6 +30,7 @@ public class FileController {
         return Mono.just(videoStreamService.prepareContent(fileName, fileType, httpRangeList));
     }
 
+    @ApiOperation("Upload video to the server")
     @PostMapping("/uploadVideo")
     public ResponseEntity<?> uploadVideo(@RequestParam MultipartFile file) {
         try {
@@ -39,6 +42,7 @@ public class FileController {
         }
     }
 
+    @ApiOperation("Get images")
     @GetMapping("/getImage/{fileName}/{fileType}")
     public ResponseEntity<byte[]> getImage(@PathVariable("fileType") String fileType,
                            @PathVariable("fileName") String fileName) {
